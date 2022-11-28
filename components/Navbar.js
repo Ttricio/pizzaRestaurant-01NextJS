@@ -21,7 +21,7 @@ const Navbar = () => {
 			<div className={styles.item}>
 				<ul className={styles.list}>
 					<Link href='/'>
-						<li className={styles.listItem}>Homepage</li>
+						<li className={styles.listItem}>Home</li>
 					</Link>
 					<li className={styles.listItem}>Products</li>
 					<li className={styles.listItem}>Menu</li>

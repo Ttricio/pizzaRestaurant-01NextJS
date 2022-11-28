@@ -7,51 +7,45 @@ import { useDispatch } from "react-redux";
 import { addProduct } from "../../Redux/cartSlice";
 
 const Product = () => {
-	const currentPizza = pizzas.find((singlePizza) => singlePizza.id === 5);
+	const router = useRouter();
+	const idOfPizza = parseFloat(router.query["id"]);
+	
+
+
+	const currentPizza = pizzas.find((singlePizza) => singlePizza.id === idOfPizza);
 	const [price, setPrice] = useState(currentPizza.prices[0]);
 	const [size, setSize] = useState(0);
 	const [quantity, setQuantity] = useState(1);
 
-	const [extras, setExtras] = useState([])
-	const dispatch = useDispatch()
+	const [extras, setExtras] = useState([]);
+	const dispatch = useDispatch();
 
-	const changePrice = (number)=>{
-setPrice(price + number)
-	}
+	const changePrice = (number) => {
+		setPrice(price + number);
+	};
 
-	const handleSize=(sizeIndex)=>{
-		const difference = currentPizza.prices[sizeIndex] - currentPizza.prices[size]
-		setSize(sizeIndex)
-		changePrice(difference)
+	const handleSize = (sizeIndex) => {
+		const difference =
+			currentPizza.prices[sizeIndex] - currentPizza.prices[size];
+		setSize(sizeIndex);
+		changePrice(difference);
+	};
 
+	const handleChange = (e, option) => {
+		const checked = e.target.checked;
 
-	}
-
-	const handleChange=(e,option)=>{
-		const checked = e.target.checked
-
-		if(checked){
-			changePrice(option.price)
-			setExtras(prev=>[...prev, option])
-		}else{
-			changePrice(-option.price)
-			setExtras(extras.filter((extra, index)=> extra.index !== option.index))
+		if (checked) {
+			changePrice(option.price);
+			setExtras((prev) => [...prev, option]);
+		} else {
+			changePrice(-option.price);
+			setExtras(extras.filter((extra, index) => extra.index !== option.index));
 		}
-	}
+	};
 
-	const addToCartHandler=()=>{
-
-		dispatch(addProduct({...currentPizza, extras, price, quantity}))
-	}
-	const router = useRouter();
-	const { idOfPizza } = router.query;
-
-	// console.log(idOfPizza);
-	console.log(`------------------------------`);
-	console.log(currentPizza.prices[0]);
-	console.log(`------------------------------`);
-	
-	console.log(extras)
+	const addToCartHandler = () => {
+		dispatch(addProduct({ ...currentPizza, extras, price, quantity }));
+	};
 
 	// const pizza = {
 	// 	id: 1,
@@ -74,7 +68,7 @@ setPrice(price + number)
 			</div>
 			<div className={styles.right}>
 				<h1 className={styles.title}>{currentPizza.title}</h1>
-				<h2>{idOfPizza}</h2>
+				
 				<span className={styles.price}>${price}</span>
 				<p className={styles.desc}>{currentPizza.desc}</p>
 				<h3 className={styles.choose}>Choose a size</h3>
@@ -106,22 +100,29 @@ setPrice(price + number)
 				</div>
 				<h3 className={styles.choose}>Choose additional ingredients</h3>
 				<div className={styles.ingredients}>
-				{currentPizza.extraOptions.map((option) => (
-            <div className={styles.option} key={option.index}>
-              <input
-                type="checkbox"
-                id={option.text}
-                name={option.text}
-                className={styles.checkbox}
-               onChange={(e)=>handleChange(e, option)}
-              />
-              <label htmlFor={option.text}>{option.text}</label>
-            </div>
-          ))}
+					{currentPizza.extraOptions.map((option) => (
+						<div className={styles.option} key={option.index}>
+							<input
+								type='checkbox'
+								id={option.text}
+								name={option.text}
+								className={styles.checkbox}
+								onChange={(e) => handleChange(e, option)}
+							/>
+							<label htmlFor={option.text}>{option.text}</label>
+						</div>
+					))}
 				</div>
 				<div className={styles.add}>
-					<input type='number' defaultValue={1} className={styles.quantity} onChange={(e)=>setQuantity(e.target.value)}/>
-					<button className={styles.button} onClick={addToCartHandler}>Add to cart</button>
+					<input
+						type='number'
+						defaultValue={1}
+						className={styles.quantity}
+						onChange={(e) => setQuantity(e.target.value)}
+					/>
+					<button className={styles.button} onClick={addToCartHandler}>
+						Add to cart
+					</button>
 				</div>
 			</div>
 		</div>
